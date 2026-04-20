@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MLBB | Tournament Teams - Mobile Legends</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(ellipse at 20% 30%, #0a0618, #020004);
+            font-family: 'Inter', 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
+            padding: 2rem 1.5rem;
+            position: relative;
+        }
+
+        /* animated background effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 85% 15%, rgba(255, 69, 0, 0.08), transparent 55%),
+                radial-gradient(circle at 15% 85%, rgba(255, 215, 0, 0.06), transparent 60%),
+                repeating-linear-gradient(45deg, rgba(255, 100, 0, 0.02) 0px, rgba(255, 100, 0, 0.02) 2px, transparent 2px, transparent 8px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 3D LOGO SECTION */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            perspective: 800px;
+        }
+
+        .logo-3d {
+            display: inline-block;
+            transform-style: preserve-3d;
+            animation: logoFloat 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-3d:hover {
+            transform: rotateY(10deg) rotateX(5deg) scale(1.02);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0px) rotateX(0deg);
+            }
+            50% {
+                transform: translateY(-5px) rotateX(2deg);
+            }
+        }
+
+        .mlbb-logo {
+            width: 220px;
+            height: auto;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 15px rgba(255, 100, 0, 0.3));
+            transition: all 0.3s;
+        }
+
+        .mlbb-logo:hover {
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)) drop-shadow(0 0 25px rgba(255, 120, 0, 0.5));
+        }
+
+        /* hero header */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            animation: fadeSlideDown 0.6s ease-out;
+        }
+
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glow-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #FF8C42, #FFD166, #FF6B35);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+            display: inline-block;
+        }
+
+        .title-decoration {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FF8C42, #FFD166, #FF6B35, transparent);
+            margin: 0.8rem auto 0;
+            border-radius: 3px;
+        }
+
+        .subhead {
+            color: #FFB347;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 0.8rem;
+            font-weight: 500;
+            text-shadow: 0 0 5px rgba(255, 100, 0, 0.3);
+        }
+
+        /* stats bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-chip {
+            background: rgba(20, 12, 38, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 3rem;
+            border: 1px solid rgba(255, 107, 53, 0.5);
+            font-size: 0.8rem;
+            color: #FFD699;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-chip span {
+            color: #FF8C42;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-right: 0.4rem;
+        }
+
+        /* action buttons */
+        .action-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            animation: fadeSlideUp 0.5s ease-out 0.1s backwards;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #2a1b4e, #19103a);
+            border: 1px solid rgba(255, 107, 53, 0.5);
+            padding: 0.7rem 1.6rem;
+            border-radius: 2.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #FFD699;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #3d296b, #251a4a);
+            border-color: #FF8C42;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            color: #FFE0B5;
+        }
+
+        .action-btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #4a1e3a, #2d1123);
+            border-color: rgba(255, 80, 120, 0.5);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #6e2a54, #3d1730);
+            border-color: #ff7193;
+        }
+
+        /* teams grid */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 2rem;
+            animation: fadeSlideUp 0.5s ease-out 0.2s backwards;
+        }
+
+        /* 3D team card */
+        .team-card {
+            background: rgba(8, 5, 18, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 107, 53, 0.5);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 140, 66, 0.2) inset;
+            padding: 1.6rem;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transform: translateY(0) rotateX(0deg);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FF6B35, #FFD166, #FF8C42, #FF6B35);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .team-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(255,107,53,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px) rotateX(2deg);
+            box-shadow: 0 35px 50px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(255, 140, 66, 0.5) inset;
+            border-color: rgba(255, 140, 66, 0.8);
+        }
+
+        .team-card:hover::before {
+            opacity: 1;
+        }
+
+        /* card header */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px dashed #FF8C4255;
+            padding-bottom: 0.7rem;
+        }
+
+        .team-badge {
+            background: linear-gradient(145deg, #FF6B3522, #FF8C4211);
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #FFB347;
+            letter-spacing: 1px;
+            border: 1px solid #FF8C4266;
+        }
+
+        .team-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(115deg, #FFD699, #FFB347, #FF8C42);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            word-break: break-word;
+            line-height: 1.3;
+            margin-bottom: 0.5rem;
+        }
+
+        /* players section - updated for NAME + ID layout */
+        .players-section {
+            margin: 1.2rem 0;
+        }
+
+        .players-title-mini {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #FFB347;
+            margin-bottom: 0.7rem;
+            font-weight: 700;
+        }
+
+        .player-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(255, 107, 53, 0.08);
+            margin: 0.6rem 0;
+            padding: 0.7rem 1rem;
+            border-radius: 1.5rem;
+            border-left: 3px solid #FF8C42;
+            transition: all 0.2s;
+            flex-wrap: wrap;
+        }
+
+        .player-row:hover {
+            background: rgba(255, 107, 53, 0.15);
+            transform: translateX(5px);
+            border-left-width: 4px;
+        }
+
+        .player-number {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #FFD166;
+            background: rgba(255, 107, 53, 0.3);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 30px;
+            flex-shrink: 0;
+        }
+
+        .player-info {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 0.8rem;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: #FFE4B5;
+            font-size: 0.9rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 0.8rem;
+            border-radius: 1.5rem;
+        }
+
+        .player-id {
+            font-size: 0.75rem;
+            color: #FFB347;
+            font-family: monospace;
+            letter-spacing: 0.5px;
+            background: rgba(255, 107, 53, 0.2);
+            padding: 0.2rem 0.7rem;
+            border-radius: 1.5rem;
+        }
+
+        .empty-player {
+            opacity: 0.6;
+            color: #c49a6c;
+            font-style: italic;
+        }
+
+        .player-id-label {
+            font-size: 0.65rem;
+            color: #FF8C42;
+            margin-right: 0.3rem;
+        }
+
+        /* card footer */
+        .card-footer {
+            margin-top: 1rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid #FF8C4233;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            color: #c49a6c;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(8, 5, 18, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 2.5rem;
+            border: 1px solid rgba(255, 107, 53, 0.5);
+            margin: 2rem 0;
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 15px #FF8C42);
+        }
+
+        .empty-state h3 {
+            color: #FFB347;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #c49a6c;
+            font-size: 0.9rem;
+        }
+
+        /* toast notification */
+        .toast-notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #1a1235, #0f0a22);
+            backdrop-filter: blur(12px);
+            border-left: 4px solid #FF8C42;
+            padding: 0.8rem 1.5rem;
+            border-radius: 1rem;
+            color: #FFD699;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 107, 53, 0.2);
+            animation: slideInRight 0.3s ease;
+            pointer-events: none;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #110c20;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF8C42;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 750px) {
+            body {
+                padding: 1rem;
+            }
+            .glow-title {
+                font-size: 1.6rem;
+                letter-spacing: 2px;
+            }
+            .mlbb-logo {
+                width: 160px;
+            }
+            .teams-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .team-name {
+                font-size: 1.3rem;
+            }
+            .action-bar {
+                gap: 0.8rem;
+            }
+            .action-btn {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.75rem;
+            }
+            .player-info {
+                flex-direction: column;
+                gap: 0.4rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- 3D Mobile Legends Logo Section -->
+    <div class="logo-section">
+        <div class="logo-3d">
+            <svg class="mlbb-logo" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="mlGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#FF6B35"/>
+                        <stop offset="50%" style="stop-color:#FFD166"/>
+                        <stop offset="100%" style="stop-color:#FF8C42"/>
+                    </linearGradient>
+                    <linearGradient id="mlGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FFD166"/>
+                        <stop offset="100%" style="stop-color:#FF6B35"/>
+                    </linearGradient>
+                    <filter id="glow3d" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                        <feMerge>
+                            <feMergeNode in="offsetblur" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+                
+                <path d="M60 25 L200 10 L340 25 L350 55 L340 85 L200 105 L60 85 L50 55 L60 25Z" fill="url(#mlGrad)" stroke="#FFD166" stroke-width="2" opacity="0.95"/>
+                <path d="M80 40 L200 28 L320 40 L328 58 L320 76 L200 92 L80 76 L72 58 L80 40Z" fill="#0a0618" stroke="#FF8C42" stroke-width="1.5"/>
+                <text x="98" y="78" font-family="Arial Black, Impact, sans-serif" font-size="32" font-weight="900" fill="url(#mlGrad2)" stroke="#FFD166" stroke-width="0.5" filter="url(#glow3d)">MLBB</text>
+                <path d="M175 45 L185 30 L195 40 L205 28 L215 40 L225 30 L235 45 L225 52 L215 48 L205 54 L195 48 L185 52 L175 45Z" fill="#FFD166" stroke="#FF6B35" stroke-width="1"/>
+                <circle cx="150" cy="50" r="2.5" fill="#FFD166"/>
+                <circle cx="260" cy="48" r="2.5" fill="#FFD166"/>
+                <circle cx="200" cy="20" r="2" fill="#FF8C42"/>
+                <text x="120" y="105" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#FFB347" letter-spacing="3">BANG BANG</text>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Hero Header -->
+    <div class="hero-section">
+        <div class="glow-title">REGISTERED TEAMS</div>
+        <div class="title-decoration"></div>
+        <div class="subhead">MOBILE LEGENDS: BANG BANG • TOURNAMENT BATTLE RECORDS</div>
+        
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-chip"><span id="teamCount">0</span> TEAMS</div>
+            <div class="stat-chip"><span id="playerCount">0</span> TOTAL HEROES</div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-bar">
+        <button id="refreshBtn" class="action-btn">⟳ REFRESH</button>
+        <button id="clearAllBtn" class="action-btn btn-danger">🗑 CLEAR ALL TEAMS</button>
+    </div>
+
+    <!-- Teams Grid Container -->
+    <div id="teamsContainer" class="teams-grid"></div>
+</div>
+
+<script>
+    (function() {
+        const container = document.getElementById('teamsContainer');
+        const teamCountSpan = document.getElementById('teamCount');
+        const playerCountSpan = document.getElementById('playerCount');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+
+        // Helper: show temporary toast
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.style.borderLeftColor = isError ? '#ff617f' : '#FF8C42';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(60px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        // Escape HTML for safety
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Render all teams with NAME + ID display
+        function renderTeams() {
+            const teams = JSON.parse(localStorage.getItem('shadow_teams')) || [];
+            
+            // Update stats
+            teamCountSpan.textContent = teams.length;
+            let totalPlayers = 0;
+            teams.forEach(team => {
+                if (team.players && Array.isArray(team.players)) {
+                    const filledPlayers = team.players.filter(p => p && p.name && p.name.trim() !== "");
+                    totalPlayers += filledPlayers.length;
+                } else if (team.players && Array.isArray(team.players) && typeof team.players[0] === 'string') {
+                    // backward compatibility for old format (just names)
+                    const filledPlayers = team.players.filter(p => p && p.trim() !== "");
+                    totalPlayers += filledPlayers.length;
+                }
+            });
+            playerCountSpan.textContent = totalPlayers;
+            
+            // Empty state
+            if (teams.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🏆</div>
+                        <h3>NO TEAMS REGISTERED</h3>
+                        <p>Use the first site to register a team and build your MLBB roster.</p>
+                        <p style="font-size:0.75rem; margin-top:1rem;">◆ MOBILE LEGENDS: BANG BANG AWAITS ◆</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Reverse to show newest first
+            const reversedTeams = [...teams].reverse();
+            
+            container.innerHTML = reversedTeams.map(team => {
+                let playersList = team.players || [];
+                
+                // Check if players are in old format (array of strings) and convert to new format
+                if (playersList.length > 0 && typeof playersList[0] === 'string') {
+                    playersList = playersList.map(name => ({ name: name, id: "" }));
+                }
+                
+                // build player rows with NAME + ID
+                const playerRows = playersList.map((player, idx) => {
+                    const playerNumber = idx + 1;
+                    const playerName = player?.name ? player.name.trim() : "";
+                    const playerId = player?.id ? player.id.trim() : "";
+                    
+                    if (playerName === "") {
+                        return `
+                            <div class="player-row">
+                                <div class="player-number">${playerNumber}</div>
+                                <div class="player-info">
+                                    <span class="player-name empty-player">— empty slot —</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        return `
+                            <div class="player-row">
+                                <div class="player-number">${playerNumber}</div>
+                                <div class="player-info">
+                                    <span class="player-name">${escapeHtml(playerName)}</span>
+                                    ${playerId ? `<span class="player-id"><span class="player-id-label">ID:</span> ${escapeHtml(playerId)}</span>` : '<span class="player-id" style="opacity:0.5;">(no ID)</span>'}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }).join('');
+                
+                const registeredDate = team.registeredAt || new Date(parseInt(team.id) || Date.now()).toLocaleString();
+                
+                return `
+                    <div class="team-card">
+                        <div class="card-header">
+                            <div class="team-badge">MLBB TOURNAMENT</div>
+                        </div>
+                        <div class="team-name">${escapeHtml(team.teamName)}</div>
+                        
+                        <div class="players-section">
+                            <div class="players-title-mini">✦ HERO ROSTER (NAME + ID) ✦</div>
+                            ${playerRows}
+                        </div>
+                        
+                        <div class="card-footer">
+                            <span class="timestamp-icon">📅 ${escapeHtml(registeredDate)}</span>
+                            <span style="font-size:0.65rem;">ID: ${team.id}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Clear all teams with confirmation
+        function clearAllTeams() {
+            if (confirm('⚠️ DARK SYSTEM RITUAL ⚠️\n\nThis will permanently delete ALL registered teams and their rosters. This action cannot be undone.\n\nAre you absolutely sure?')) {
+                localStorage.removeItem('shadow_teams');
+                renderTeams();
+                showToast('All teams have been erased from the Land of Dawn.', false);
+            }
+        }
+        
+        // Refresh handler
+        function refreshData() {
+            renderTeams();
+            showToast('Team list refreshed.', false);
+        }
+        
+        // Listen for storage changes from other tabs (first site)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'shadow_teams') {
+                renderTeams();
+                showToast('Data updated from another window.', false);
+            }
+        });
+        
+        // Attach event listeners
+        refreshBtn.addEventListener('click', refreshData);
+        clearAllBtn.addEventListener('click', clearAllTeams);
+        
+        // initial render
+        renderTeams();
+        
+        // welcome toast on first load
+        if (!sessionStorage.getItem('mlbb_view_welcome_v2')) {
+            setTimeout(() => {
+                showToast('Mobile Legends: Bang Bang • View registered tournament teams with Name + ID.', false);
+                sessionStorage.setItem('mlbb_view_welcome_v2', 'true');
+            }, 400);
+        }
+    })();
+</script>
+</body>
+  </html>
